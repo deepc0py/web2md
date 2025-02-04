@@ -31,7 +31,7 @@ import { WebToMarkdownConverter } from 'web-to-markdown';
 const converter = new WebToMarkdownConverter();
 
 // Convert a URL to markdown
-const url = 'https://example.com/article';
+const url = 'https://en.wikipedia.org/wiki/Dark0de';
 const markdown = await converter.urlToMarkdown(url);
 
 // Or convert HTML directly
