@@ -1,15 +1,16 @@
 # Web to Markdown Converter
 
-A utility class that converts web content (URLs or HTML) to markdown format. This is extracted and adapted from the [Jina AI Reader project](https://r.jina.ai).
+Web to markdown conversion utility adapted from the [Jina AI Reader API](https://r.jina.ai). Convert web pages and HTML content into clean, well-formatted markdown.
 
-## Features
+## Overview
 
-- Convert HTML content to markdown
-- Convert URLs to markdown by fetching and converting their content
-- Support for GitHub Flavored Markdown (GFM)
-- Configurable image handling
-- Clean and tidy markdown output
-- TypeScript support
+The converter handles various aspects of web content conversion:
+- Extracts and preserves main content while removing navigation, ads, and other irrelevant elements
+- Maintains document structure and formatting
+- Supports GitHub Flavored Markdown features
+- Handles Wikipedia pages 
+- Preserves metadata like titles and publication dates
+- Manages images and tables appropriately
 
 ## Installation
 
@@ -21,9 +22,7 @@ yarn add web-to-markdown
 pnpm add web-to-markdown
 ```
 
-## Usage
-
-### Basic Usage
+## Basic Usage
 
 ```typescript
 import { WebToMarkdownConverter } from 'web-to-markdown';
@@ -31,74 +30,97 @@ import { WebToMarkdownConverter } from 'web-to-markdown';
 // Create a converter instance
 const converter = new WebToMarkdownConverter();
 
-// Convert HTML to markdown
-const html = '<h1>Hello World</h1><p>This is a test</p>';
-const markdown = converter.htmlToMarkdown(html);
-console.log(markdown);
+// Convert a URL to markdown
+const url = 'https://example.com/article';
+const markdown = await converter.urlToMarkdown(url);
 
-// Convert URL to markdown
-const url = 'https://example.com';
-converter.urlToMarkdown(url)
-  .then(markdown => console.log(markdown))
-  .catch(error => console.error(error));
+// Or convert HTML directly
+const html = '<article><h1>Hello World</h1><p>Content here</p></article>';
+const markdown = converter.htmlToMarkdown(html);
 ```
 
-### Advanced Usage
+## Configuration Options
+
+The converter can be customized with various options:
 
 ```typescript
-import { WebToMarkdownConverter, WebToMarkdownOptions } from 'web-to-markdown';
-
-// Configure the converter with options
-const options: WebToMarkdownOptions = {
-  retainImages: 'all',  // Keep all images in the markdown output
-  noGfm: false,         // Enable GitHub Flavored Markdown
-  imgDataUrlToObjectUrl: true, // Convert data URLs to blob URLs for images
-};
-
-const converter = new WebToMarkdownConverter(options);
-
-// Convert HTML with custom options
-const html = '<h1>Hello World</h1><p>This is a test</p>';
-let markdown = converter.htmlToMarkdown(html);
-
-// Clean up the markdown if needed
-markdown = converter.tidyMarkdown(markdown);
+const converter = new WebToMarkdownConverter({
+    // Control image handling
+    retainImages: 'all',    // 'none' | 'alt' | 'alt_p' | 'all'
+    
+    // GitHub Flavored Markdown support
+    noGfm: false,           // true | false | 'table'
+    
+    // Image data URL handling
+    imgDataUrlToObjectUrl: true,
+    
+    // Custom rules and filters
+    customRules: {},
+    customKeep: null
+});
 ```
+
+## Features
+
+### Content Extraction
+- Intelligent main content detection
+- Removal of navigation, ads, and irrelevant elements
+- Special handling for Wikipedia pages
+- Preservation of document structure
+
+### Metadata Handling
+- Extracts and includes page titles
+- Preserves publication dates
+- Maintains source URL information
+- Supports custom metadata fields
+
+### Markdown Formatting
+- GitHub Flavored Markdown support
+- Table formatting
+- Image handling with multiple options
+- Clean and consistent output
+
+### Cleanup and Normalization
+- Removes redundant whitespace
+- Normalizes line endings
+- Fixes common markdown formatting issues
+- Handles special characters appropriately
 
 ## API Reference
 
-### WebToMarkdownConverter
-
-#### Constructor Options
-
-- `retainImages`: Control how images are handled
-  - `'none'`: Remove all images
-  - `'alt'`: Keep only alt text
-  - `'alt_p'`: Keep alt text in parentheses
-  - `'all'`: Keep all images (default)
-- `noGfm`: Disable GitHub Flavored Markdown features
-  - `false`: Enable all GFM features (default)
-  - `true`: Disable all GFM features
-  - `'table'`: Disable only GFM tables
-- `imgDataUrlToObjectUrl`: Convert data URLs to blob URLs for images
-- `customRules`: Add custom turndown rules
-- `customKeep`: Specify elements to keep in the output
+### WebToMarkdownConverter Class
 
 #### Methods
 
-- `htmlToMarkdown(html: string): string`
-  Convert HTML string to markdown
+`htmlToMarkdown(html: string, url?: string): string`
+- Converts HTML content to markdown
+- Optionally accepts a source URL for reference
 
-- `urlToMarkdown(url: string): Promise<string>`
-  Fetch URL content and convert to markdown
+`urlToMarkdown(url: string): Promise<string>`
+- Fetches and converts web page content to markdown
+- Returns a promise resolving to the markdown string
 
-- `tidyMarkdown(markdown: string): string`
-  Clean up markdown content by fixing common issues
+`tidyMarkdown(markdown: string): string`
+- Cleans and normalizes markdown content
+- Fixes common formatting issues
+
+#### Configuration Options
+
+`WebToMarkdownOptions`:
+- `retainImages`: Controls image handling
+- `noGfm`: Toggles GitHub Flavored Markdown features
+- `imgDataUrlToObjectUrl`: Handles image data URLs
+- `customRules`: Adds custom conversion rules
+- `customKeep`: Specifies elements to preserve
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
 MIT
-# web2md
-# web2md
-# web2md
-# web2md
+
+## Acknowledgments
+
+This project is based on the [Jina AI Reader API](https://r.jina.ai), adapted and modified for standalone use.

@@ -1,0 +1,27 @@
+{
+    "name": "web-to-markdown",
+    "version": "1.0.0",
+    "description": "A utility to convert web content to markdown",
+    "main": "dist/WebToMarkdownConverter.js",
+    "types": "dist/WebToMarkdownConverter.d.ts",
+    "bin": {
+        "web-to-markdown": "dist/cli.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "test": "jest",
+        "start": "node dist/cli.js"
+    },
+    "dependencies": {
+        "axios": "^1.6.7",
+        "jsdom": "^24.0.0",
+        "turndown": "^7.1.2",
+        "turndown-plugin-gfm": "^1.0.2"
+    },
+    "devDependencies": {
+        "@types/jsdom": "^21.1.6",
+        "@types/turndown": "^5.0.4",
+        "typescript": "^5.3.3",
+        "@types/node": "^20.11.24"
+    }
+}
